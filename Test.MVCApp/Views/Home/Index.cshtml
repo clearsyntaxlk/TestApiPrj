@@ -1,0 +1,532 @@
+﻿@using Test.MVCApp.Models.Interface;
+@model IApiClient
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers 
+
+<!-- <script src="~/js/index.js"></script>-->
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<dialog id="currDate" class="alert-dismissible">
+    @Html.Partial("_CurrentDateView")
+</dialog>
+<div>
+    <p> <button onclick="showDate();">Show Date</button> </p>
+</div>
+<script>
+    function showDate(){
+        $("#currDate").show(3000);
+    }
+</script>
+
+<div class="text-left">
+    <h1 class="display-4">WS</h1>
+    <!--<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> -->
+    @{
+        var result =Model.GetEndPointsAsync().Result.EndPoints;
+        foreach (var o in result)
+        {
+            string en = "{v}/" + @o.EndPointName;
+            foreach (var p in o.Parameters)
+            {
+                en += "/{" + @p.Name + "}";
+            }
+                                                                                                                                                                                    <a href=@string.Format("{0}{1}", "https://localhost:7231/?"
+            , @en)>@string.Format("{0}{1}", "https://localhost:7231/", @en)</a> <br />
+
+                                                                                                                                                                                   <button id="btnGetType" onclick="hello()"> @o.RequestType </button> <br />
+            if (@o.RequestBodyJson != null && @o.RequestBodyJson != "")
+            {
+                                                                                                                                                                                    <p>Data to send: <br />
+                                                                                                                                                                                        <input type="text" /> <br />
+                                                                                                                                                                                    </p>
+            }
+        }
+    }
+</div>
+<div id='tabs' style='max-width: 800px;'>
+    <div>
+        <div>TreeView</div>
+        <div>Data Table</div>
+    </div>
+    <div>
+        <div>
+            <div id="jstree">My tree</div>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet
+            ornare dolor, tincidunt posuere ante. Sed sed lacinia lorem. In gravida
+            tempus erat vel auctor.
+        </div>
+        <div>
+            Praesent non pellentesque nunc. Nam imperdiet odio ut enim molestie elementum.
+            Proin aliquet, eros in aliquet condimentum, diam quam mollis sem, ullamcorper
+            dapibus diam lorem at eros. Duis at ligula at sem elementum cursus. Curabitur
+            cursus quis sapien sit amet vestibulum.
+        </div>
+    </div>
+</div>
+
+
+<input type="button" name="selectedItems" id="selectedItems" />
+<input type="submit" onclick="getSelect()" value="Submit" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+
+<script src="~/lib/bootstrap/dist/js/jspreadsheet/v4/jexcel.js"></script>
+<link href="~/lib/bootstrap/dist/css/jspreadsheet/v4/jexcel.css" rel="stylesheet" />
+<script src="~/lib/bootstrap/dist/js/jspreadsheet/v4/jsuites.js"></script>
+<link href="~/lib/bootstrap/dist/css/jspreadsheet/v4/jsuites.css" rel="stylesheet" />
+<script src="~/lib/bootstrap/dist/js/commonfunction.js"></script>
+
+<!--
+ <script src="https://jsuites.net/v5/jsuites.js"></script>
+<link rel="stylesheet" href="https://jsuites.net/v5/jsuites.css" type="text/css" />
+-->
+<!--
+<script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+<link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+
+<script src="https://jsuites.net/v4/jsuites.js"></script>
+<link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+-->
+<!-- v9 is license required
+<script src="https://jspreadsheet.com/v9/jspreadsheet.js"></script>
+<link rel="stylesheet" href="https://jspreadsheet.com/v9/jspreadsheet.css" type="text/css" />
+<script src="https://jsuites.net/v5/jsuites.js"></script>
+<link rel="stylesheet" href="https://jsuites.net/v5/jsuites.css" type="text/css" />
+-->
+<!--
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/js/jquery.jexcel.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jexcel/1.5.7/css/jquery.jexcel.css" type="text/css" />
+-->
+
+
+<script>
+    var tabs = jSuites.tabs(document.getElementById('tabs'), {
+        animation: true,
+        allowCreate: true,
+        allowChangePosition: true,
+        padding: '10px',
+    });
+</script>
+
+<p><div id="dropdown1"></div></p>
+<p><div id="my"></div></p>
+
+<script>
+
+
+  /*  debugger;
+    var result ="";
+    $.ajax({
+        URL: "/Home/Nodes/",
+        type:"GET",
+        success: function (data) {
+            let x = JSON.stringify(data.d);
+            console.log(x);
+            result = x;
+            alert(result);
+        },
+        error: function (error) {
+            console.log('Error ${error}')
+        }
+    });
+    */
+    var dataOpt = ['Dell', 'HP', 'Apple','MIS','Lenovo','Other'];
+    var ddl = jSuites.dropdown(document.getElementById('dropdown1'), {
+        data: dataOpt,
+        autocomplete: true,
+        multiple: true,
+        width: '280px',
+    });
+</script>
+
+<p><div id="mytable"></div></p>
+<div id='console'></div>
+<input type='button' id='showonconsole' value='console.log on data' />
+
+<script>
+    const columnMap = {
+        "name": 1,
+        "qty": 8,        // "qty" is in column 8
+        "unitPrice": 9,      // "price" is in column 9
+        "totalAmt": 10,  // "totalAmt" is in column 10
+        "action": 12
+    };
+    function showAction(para) {
+        alert(para);
+    };
+
+    let addActionButton = function (instanse) {
+        let isDisabled = ""; // "disabled"; // if need to disable this button
+        $(instanse).find('td[data-x="' + columnMap["action"] + '"][data-y]').html('<button ' + isDisabled + ' onclick="showAction($(this).closest(\'tr\').find(\'td[data-x=' + columnMap["name"] + ']\').html())">POST </button>');
+    }
+
+    let toggle = function (b) {
+        if (table.isReadOnly('C2')) {
+            table.setReadOnly('C2', false);
+            b.value = 'Disable C2';
+        } else {
+            table.setReadOnly('C2', true);
+            b.value = 'Enable C2';
+        }
+    }
+
+    function autoSizeColumns(instance) {
+        // Get the data from the spreadsheet
+        let data = instance.getData();
+        // Iterate over each column
+        for (let col = 0; col < data[0].length; col++) {
+            let maxLength = 0;
+
+            // Loop through each row in the column to find the longest content
+            for (let row = 0; row < data.length; row++) {
+                let cellValue = data[row][col];
+                let cellLength = cellValue ? cellValue.toString().length : 0;
+                if (cellLength > maxLength) {
+                    maxLength = cellLength;
+                }
+            }
+            // Set the column width dynamically (assuming average character width ~7px)
+            let columnWidth = maxLength * 7 + 20; // Add padding
+            instance.setColumnWidth(col, columnWidth);
+        }
+    };
+
+    let data = [
+        {
+            id:'1',
+            name: '',
+            gender: '',
+            dateOfBirth: '',
+            photo:'',
+                number: '',
+                city: '',
+            isPaid: false,
+            qty: '0',
+            unitPrice: '0',
+            totalAmt: '0',
+            rank: '',
+
+        },
+        {
+            id:'1',
+            name: 'Jorge Name of the',
+            gender: 'Male',
+            dateOfBirth: '07-12-2021',
+            photo:'',
+                number: '201',
+                city: 'New York',
+            isPaid: true,
+            qty: '1',
+            unitPrice: '2.00',
+            totalAmt: '0',
+            rank: '#777700',
+
+        },
+        {
+            id:'501',
+            name: 'Paul',
+            gender: 'Female',
+            dateOfBirth: '10-02-2020',
+            photo: '',
+                number: '1',
+                city: 'New Jersey',
+            isPaid: true,
+            qty: '11',
+            unitPrice: '2.00',
+            totalAmt: '00',
+            rank: '#007777',
+        },
+    ];
+
+    let gender = [];
+    function setGender() {
+        gender.push(
+            "Male",
+            "Female",
+        );
+        //return gender;
+    }
+    let city = [
+        'New York',
+        'New Jersey'
+    ];
+
+    var selectedCellAmount = '';
+
+    var updateCell = function (obj, cel, x, y) {
+        if (x == columnMap["qty"] || x == columnMap["unitPrice"]) {
+            //alert(cel.innerText);
+            //if (parseFloat(cell.innerText) > 10) {
+            //    cell.style.color = 'red';
+            //} else {
+            //    cell.style.color = 'green';
+            //}
+
+            // Get the values of qty (col 1) and price (col 9) to calculate totalAmt
+            let qty = parseFloat(obj.jexcel.getValueFromCoords(columnMap["qty"], y));
+            let price = parseFloat(obj.jexcel.getValueFromCoords(columnMap["unitPrice"], y));
+
+            // Check if the values are valid before calculating
+            if (!isNaN(qty) && !isNaN(price)) {
+                let totalAmt = qty * price;
+                // Check if the totalAmt actually needs updating to avoid unnecessary set operations
+                let currentTotalAmt = parseFloat(obj.jexcel.getValueFromCoords(columnMap["totalAmt"], y));
+                if (totalAmt !== currentTotalAmt) {
+                    // Update the totalAmt only if it has changed
+
+                    obj.jexcel.setValueFromCoords(columnMap["totalAmt"], y, formatNumber(totalAmt));
+                }
+            } else {
+                if (isNaN(qty)) {
+                    //cell.style.color = 'red';
+                    obj.jexcel.setValueFromCoords(columnMap["qty"], y, 0);
+                    obj.jexcel.setValueFromCoords(columnMap["totalAmt"], y, 0);
+                }
+                if (isNaN(price)) {
+                    obj.jexcel.setValueFromCoords(columnMap["unitPrice"], y, 0);
+                    obj.jexcel.setValueFromCoords(columnMap["totalAmt"], y, 0);
+                }
+
+            }
+        }
+        else if (x == columnMap["name"]) {
+            //while (gender.length > 0) {
+            //    gender.pop();
+            //}
+            //gender.splice(0, gender.length);
+            //gender.push("Other");
+            setGender();
+           // obj.jexcel.setValueFromCoords(columnMap["gender"], x, "Other");
+        }
+        data = obj.jexcel.getData();
+    }
+
+    let table = jexcel(document.getElementById('mytable'), {
+        //toolbar: true,
+        data: data,
+        onchange: updateCell,
+        tableOverflow: true,
+        tableWidth: '1000px',
+        columns: [
+            {
+                name: 'id',
+                type: 'autonumber', title: 'Id', readOnly: true,
+                width: '50px',
+                readOnly: true,
+            },
+            {
+                name: 'name',
+                title: 'Name',
+                type: 'text',
+                width: '200px',
+                wordWrap: true,
+                //readOnly: true,
+            },
+            {
+                name: 'gender',
+                title: 'Gender',
+                type: 'dropdown',
+                width: '100px',
+                source: gender,
+            },
+            {
+                name: 'dateOfBirth',
+                title: 'DOB',
+                type: 'calendar',
+                width: '120px',
+                options: { format: 'DD/MM/YYYY' }
+            },
+            {
+                name: 'photo',
+                title: 'Photo',
+                type: 'image',
+                width: '120px',
+            },
+            {
+                name: 'number',
+                title: 'Number',
+                type: 'text',
+                width: '50px',
+            },
+            {
+                name: 'city',
+                title: 'City',
+                type: 'text',
+                width: '200px',
+            },
+            {
+                name: 'isPaid',
+                title: 'IsPaid',
+                type: 'checkbox',
+                width: '80px',
+            },
+            {
+                name: 'qty',
+                title: 'Qty',
+                type: 'numeric',
+                width: '80px',
+            },
+            {
+                name: 'unitPrice',
+                title: 'Price',
+                //mask: '$ #.##0,00',
+                width: '80px',
+                decimal: ',',
+            },
+            {
+                name: 'totalAmt',
+                title: 'TotalAmt',
+                type: 'numeric',
+                //mask: '#.###,00',
+                width: '80px',
+                decimal: ',',
+       
+            },
+            {
+                name: 'rank',
+                title: 'Rank',
+                type: 'color',
+                width: '80px',
+                render: 'square',
+
+            },
+            {
+                name: 'action',
+                title: 'Action',
+                width: '80px',
+                readOnly: true,
+            },
+        ],
+        onload: addActionButton,
+        oninsertrow: addActionButton,
+
+        //updateTable: function (instance, cell, col, row, val) {
+        /*updateCell: function (x, y, value, force) {
+            if (y == columnMap["qty"]) {
+                alert(x);
+                //if (parseFloat(cell.innerText) > 10) {
+                //    cell.style.color = 'red';
+                //} else {
+                //    cell.style.color = 'green';
+                //}
+
+                // Get the values of qty (col 1) and price (col 9) to calculate totalAmt
+                let qty = parseFloat(table.jexcel.getValueFromCoords(columnMap["qty"], x));
+                let price = parseFloat(table.jexcel.getValueFromCoords(columnMap["unitPrice"], x));
+
+                // Check if the values are valid before calculating
+                if (!isNaN(qty) && !isNaN(price)) {
+                    let totalAmt = qty * price;
+                    // Check if the totalAmt actually needs updating to avoid unnecessary set operations
+                    let currentTotalAmt = parseFloat(table.jexcel.getValueFromCoords(columnMap["totalAmt"], x));
+                    if (totalAmt !== currentTotalAmt) {
+                        // Update the totalAmt only if it has changed
+
+                        table.jexcel.setValueFromCoords(columnMap["totalAmt"], x, formatNumber(totalAmt));
+                    }
+                } else {
+                    if (isNaN(qty)) {
+                        //cell.style.color = 'red';
+                        table.jexcel.setValueFromCoordsOnly4Error(columnMap["qty"], x, 0);
+                        table.jexcel.setValueFromCoordsOnly4Error(columnMap["totalAmt"], x, 0);
+                    }
+                    if (isNaN(price)) {
+                        table.jexcel.setValueFromCoordsOnly4Error(columnMap["unitPrice"], x, 0);
+                        table.jexcel.setValueFromCoordsOnly4Error(columnMap["totalAmt"], x, 0);
+                    }
+                    
+                }
+                data = table.jexcel.getData();
+           
+            }
+        }, */
+           // data = instance.jexcel.getData();
+        //},
+        /*oninsertrow: function (instance, rowNumber, numOfRows) {
+            // This function is triggered every time a new row is inserted
+            data = instance.jexcel.getData();
+            //console.log('Updated table data after row insertion:', updatedData);
+        },*/
+        filters: true,
+        allowExport:true,
+
+    });
+
+    //document.getElementById("togglebtn").onclick = (e) => toggle(e.target);
+
+    document.getElementById('showonconsole').onclick = function () { document.getElementById('console').innerHTML = JSON.stringify(data) }
+    //document.getElementById("exportbtn").onclick = function () { exportToCSV(instance) };
+    
+</script>
+
+<input type='button' value='Export to XLS' id="exportbtn" />
+<button onclick="table.download(true)">Download CSV</button>
+<p><input type="button" value="Disabled C2" id="togglebtn"></p>
+<p><input type="button" value="Show Table Details" onclick="getTableDetails()"></p>
+
+<script>
+    function getSelect(){
+        alert($('#selectedItems').val()); 
+    }
+    function getTableDetails() {
+        alert(JSON.stringify(tblData));
+        autoSizeColumns(table);
+    }
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //alert(JSON.stringify(@Html.Raw(ViewBag.Json)));
+        $('#jstree').on('changed.jstree', function (e, data) {
+            var i, j;
+            var selectedItems = [];
+            for (i = 0, j = data.selected.length; i < j; i++) {
+
+                //Fetch the Id.
+                var id = data.selected[i];
+
+                //Remove the ParentId.
+                if (id.indexOf('-') != -1) {
+                    id = id.split("-")[1];
+                }
+                //Add the Node to the JSON Array.
+                selectedItems.push({
+                    text: data.instance.get_node(data.selected[i]).text,
+                    id: id,
+                    parent: data.selected[i].split("-")[0]
+                });
+            }
+            //Serialize the JSON Array and save in HiddenField.
+            $('#selectedItems').val(JSON.stringify(selectedItems));
+        }).jstree({
+            "core": {
+                "themes": {
+                    "variant": "large",
+                    "iconds": false
+                },
+                "data": {
+                    // The URL that the request will be made to, change this to your actual endpoint
+                    'url': "/Home/Nodes/",
+                    'data': function (node) {
+                        // For root node, pass null; otherwise, pass the node id to get children
+                        return { 'id': node.id };
+                    },
+                }
+            },
+            "checkbox": {
+                "keep_selected_style": false
+            }
+            , "plugins": ["wholerow", "checkbox"],
+        });
+
+    });
+
+</script>
+
+

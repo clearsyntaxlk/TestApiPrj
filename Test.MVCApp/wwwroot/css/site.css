@@ -1,0 +1,38 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.button {
+    display: block;
+    float: left;
+    border-top: 1px solid #CCC;
+    border-left: 1px solid #CCC;
+    border-bottom: 1px solid #AAA;
+    border-right: 1px solid #AAA;
+    background-color: #E3E3E3;
+    font-family: Verdana, Helvetica, sans-serif;
+    font-size: 100%;
+    line-height: 110%;
+    text-decoration: none !important;
+    color: #333 !important;
+    margin: 0 15px 0 0;
+    padding: 5px 10px 5px 7px;
+    cursor: pointer;
+    box-shadow: 1px 1px 2px #969696;
+    -moz-box-shadow: 1px 1px 2px #969696; /* Firefox */
+    -webkit-box-shadow: 1px 1px 2px #969696; /* Safari and Chrome */
+}

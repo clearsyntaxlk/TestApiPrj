@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Test.Models\Test.Models.csproj" />
+
+	  <PackageReference Include="Dapper" Version="2.1.35" />
+
+	  <PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="10.3.1" />
+
+	  <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
+	  <PackageReference Include="Polly" Version="8.4.1" />
+	  <PackageReference Include="Polly.Core" Version="8.4.1" />
+	  
+	  <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+	  <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.9" />
+	  <PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="10.3.1" />
+	  
+  </ItemGroup>
+
+</Project>
